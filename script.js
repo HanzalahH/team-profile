@@ -48,7 +48,7 @@
   var target = document.getElementById("type-target");
   var out = document.getElementById("term-out");
   var lines = [
-    { cmd: "whoami", out: ["midnight monks — independent security researchers", "web • api • mobile • cloud • ai"] },
+    { cmd: "whoami", out: ["rootline — independent security researchers", "web • api • mobile • cloud • ai"] },
     { cmd: "cat scope.txt", out: ["scope: agreed in writing, before anything is touched", "third-party systems: out of scope"] },
     { cmd: "./engage.sh", out: ["status: available for engagements", "proof for every finding. fixed prices."] }
   ];
