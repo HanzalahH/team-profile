@@ -212,11 +212,13 @@ h2 {
 .recog-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; align-items: center; }
 .recog {
   background: #ffffff; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px;
-  padding: 12px 14px; text-align: center;
-  display: flex; align-items: center; justify-content: center;
-  min-height: 72px;
+  padding: 12px 10px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  min-height: 108px;
 }
 .recog img { height: 44px; max-width: 140px; object-fit: contain; }
+.recog-name { font-size: 12px; font-weight: 600; color: #1a1a1a; line-height: 1.25; }
+.recog.dark-logo .recog-name { color: #f5f8fb; }
 /* logos whose only available file is white: no white tile until the original arrives */
 .recog.dark-logo, .client-logo.dark-logo { background: transparent; border-color: transparent; }
 
