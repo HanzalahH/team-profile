@@ -75,6 +75,7 @@ header, main, footer { position: relative; z-index: 1; }
   z-index: 100;
 }
 .brand { display: flex; align-items: center; gap: 10px; color: var(--text); font-family: var(--mono); font-weight: 800; font-size: 15px; letter-spacing: 1px; }
+.brand-mark { height: 30px; width: auto; display: block; }
 .brand-icon { color: var(--cyan); display: flex; }
 .brand-text .cursor-blink { color: var(--cyan); animation: blink 1.1s steps(1) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
@@ -103,6 +104,7 @@ h2 {
 /* hero */
 .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 130px 0 60px; }
 .hero-inner { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 56px; align-items: center; }
+.hero-mark { height: 96px; width: auto; display: block; margin-bottom: 22px; }
 .pill {
   display: inline-flex; align-items: center; gap: 9px;
   font-family: var(--mono); font-size: 13px; color: var(--lime);
@@ -202,6 +204,9 @@ h2 {
 .member-meta { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
 .member-detail { font-size: 13.5px; color: var(--muted); margin-bottom: 10px; line-height: 1.6; }
 .member-detail span { font-family: var(--mono); font-size: 11.5px; font-weight: 700; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 2px; }
+.exp-list { list-style: none; margin: 2px 0 0; padding: 0; }
+.exp-list li { padding-left: 14px; position: relative; margin-bottom: 3px; }
+.exp-list li::before { content: "▸"; position: absolute; left: 0; color: var(--cyan); }
 .member-hof { font-size: 13px; color: var(--text); margin-bottom: 18px; }
 .member-hof::before { content: "★ "; color: var(--lime); }
 .member-link { font-family: var(--mono); font-size: 13px; font-weight: 700; }
@@ -283,6 +288,7 @@ footer {
   font-family: var(--mono); font-size: 13px; color: var(--muted); flex-wrap: wrap;
 }
 .foot-left { color: var(--text); }
+.foot-mark { height: 24px; width: auto; vertical-align: -6px; margin-right: 4px; }
 .to-top { font-family: var(--mono); color: var(--cyan); border: 1px solid var(--border); border-radius: 100px; padding: 6px 14px; }
 
 /* reveal on scroll */
