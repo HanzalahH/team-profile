@@ -318,13 +318,14 @@ footer {
   .stats { grid-template-columns: 1fr 1fr; }
 }
 
-/* Horizontal scroll rows (certifications, recognition, clients) */
-.hscroll { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 2px 12px; scrollbar-width: thin; scrollbar-color: #333333 transparent; }
-.hscroll::-webkit-scrollbar { height: 6px; }
-.hscroll::-webkit-scrollbar-track { background: transparent; }
-.hscroll::-webkit-scrollbar-thumb { background: #333333; border-radius: 3px; }
-.hscroll > * { scroll-snap-align: start; flex-shrink: 0; }
-.hscroll .recog { width: 170px; }
+/* Auto-scrolling rows (certifications, recognition, clients) */
+.marquee { overflow: hidden; padding: 6px 0 12px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+.marquee-track { display: flex; width: max-content; animation: scroll-left 60s linear infinite; }
+.marquee-track > * { flex-shrink: 0; }
+.marquee-track .recog { width: 170px; margin-right: 16px; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes scroll-left { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
 .cert-tile { width: 132px; height: 156px; flex-shrink: 0; background: #ffffff; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 8px; margin-right: 16px; }
 .cert-tile img { max-width: 96px; max-height: 88px; object-fit: contain; }
 .cert-name { margin-top: 10px; font-size: 11px; font-weight: 600; line-height: 1.35; color: #111111; text-align: center; }
