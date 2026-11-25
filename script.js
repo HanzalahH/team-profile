@@ -104,6 +104,11 @@
     setTimeout(typeStep, 600);
   }
 
+  /* ---------- certifications marquee: duplicate each track once for a seamless loop ---------- */
+  document.querySelectorAll(".marquee-track").forEach(function (track) {
+    track.innerHTML += track.innerHTML;
+  });
+
   /* ---------- reveal on scroll ---------- */
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
