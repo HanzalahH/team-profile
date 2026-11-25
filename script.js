@@ -2,7 +2,7 @@
 (function () {
   "use strict";
 
-  /* ---------- full-page digital rain (dim teal, sparse, slow) ---------- */
+  /* ---------- full-page digital rain (dim red, sparse, slow) ---------- */
   var canvas = document.getElementById("rain");
   var ctx = canvas.getContext("2d");
   var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%&#*$@!?<>/\\|";
@@ -29,12 +29,12 @@
 
   ctx.font = fontSize + "px 'JetBrains Mono', monospace";
   function drawRain() {
-    ctx.fillStyle = "rgba(2, 9, 10, 0.12)";
+    ctx.fillStyle = "rgba(10, 10, 10, 0.14)";
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
     for (var i = 0; i < columns; i++) {
       var ch = chars[Math.floor(Math.random() * chars.length)];
-      // mostly dim teal, occasional brighter head
-      ctx.fillStyle = Math.random() < 0.08 ? "rgba(47, 255, 208, 0.55)" : "rgba(0, 232, 200, 0.20)";
+      // mostly dim red, occasional brighter head
+      ctx.fillStyle = Math.random() < 0.08 ? "rgba(255, 107, 107, 0.55)" : "rgba(255, 46, 46, 0.20)";
       ctx.fillText(ch, i * fontSize, drops[i] * fontSize);
       if (drops[i] * fontSize > window.innerHeight && Math.random() > 0.985) {
         drops[i] = Math.floor(Math.random() * -40);
@@ -44,46 +44,65 @@
   }
   setInterval(drawRain, 66);
 
-  /* ---------- terminal typing ---------- */
-  var target = document.getElementById("type-target");
-  var out = document.getElementById("term-out");
+  /* ---------- terminal typing: behaves like a real session ----------
+     Each command is typed at a live prompt, stays visible with its
+     output in the scrollback, and a fresh prompt appears below.
+     whoami prints the user, cat prints file contents with no prefix. */
+  var termBody = document.getElementById("term-body");
+  var PROMPT = "root@rootline:~# ";
   var lines = [
-    { cmd: "whoami", out: ["rootline: independent security researchers", "web • api • mobile • cloud • ai"] },
-    { cmd: "cat scope.txt", out: ["scope: agreed in writing, before anything is touched", "third-party systems: out of scope"] },
+    { cmd: "whoami", out: ["root"] },
+    { cmd: "cat scope.txt", out: ["target: web app + api", "in scope: agreed in writing", "out of scope: third-party systems"] },
+    { cmd: "nmap -sV app.example.com", out: ["443/tcp open  https", "80/tcp open   http"] },
     { cmd: "./engage.sh", out: ["status: available for engagements", "proof for every finding. fixed prices."] }
   ];
-  var lineIdx = 0, charIdx = 0, phase = "typing";
+  var lineIdx = 0, charIdx = 0, curLine = null, curTyped = null, curCursor = null;
 
+  function trimScrollback() {
+    while (termBody.children.length > 12) termBody.removeChild(termBody.firstChild);
+  }
+  function newPromptLine() {
+    curLine = document.createElement("div");
+    curLine.className = "term-line";
+    var p = document.createElement("span");
+    p.className = "prompt";
+    p.textContent = PROMPT;
+    curTyped = document.createElement("span");
+    curCursor = document.createElement("span");
+    curCursor.className = "block-cursor";
+    curLine.appendChild(p);
+    curLine.appendChild(curTyped);
+    curLine.appendChild(curCursor);
+    termBody.appendChild(curLine);
+    trimScrollback();
+  }
   function typeStep() {
     var line = lines[lineIdx];
-    if (phase === "typing") {
+    if (!curLine) newPromptLine();
+    if (charIdx < line.cmd.length) {
       charIdx++;
-      target.textContent = line.cmd.slice(0, charIdx);
-      if (charIdx >= line.cmd.length) {
-        phase = "show";
-        setTimeout(typeStep, 500);
-        return;
-      }
-      setTimeout(typeStep, 70);
-    } else if (phase === "show") {
-      line.out.forEach(function (text) {
-        var div = document.createElement("div");
-        div.textContent = text;
-        out.appendChild(div);
-      });
-      while (out.children.length > 6) out.removeChild(out.firstChild);
-      phase = "pause";
-      setTimeout(typeStep, 2600);
-    } else {
-      // clear and move to next command
-      target.textContent = "";
-      lineIdx = (lineIdx + 1) % lines.length;
-      phase = "typing";
-      charIdx = 0;
-      setTimeout(typeStep, 400);
+      curTyped.textContent = line.cmd.slice(0, charIdx);
+      setTimeout(typeStep, 65);
+      return;
     }
+    // command finished: freeze it, print its output, open a fresh prompt
+    curLine.removeChild(curCursor);
+    line.out.forEach(function (text) {
+      var div = document.createElement("div");
+      div.className = "term-out";
+      div.textContent = text;
+      termBody.appendChild(div);
+    });
+    trimScrollback();
+    curLine = null;
+    lineIdx = (lineIdx + 1) % lines.length;
+    charIdx = 0;
+    setTimeout(typeStep, 2400);
   }
-  if (target && out) typeStep();
+  if (termBody) {
+    newPromptLine();
+    setTimeout(typeStep, 600);
+  }
 
   /* ---------- reveal on scroll ---------- */
   var io = new IntersectionObserver(function (entries) {
